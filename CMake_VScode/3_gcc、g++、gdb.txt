@@ -1,0 +1,63 @@
+安装：sudo apt install gcc/g++/gdb
+查看版本：gcc/g++/gdb -v/--version
+
+
+
+编译过程
+预处理生成.i：g++ -E test.cpp -o test.i（处理所有以#开头的代码，包括头文件、宏定义、条件编译）
+编译生成.s：g++ -S test.i -o test.s（语法检查以及将C语言编程汇编语言）
+汇编生成.o：g++ -c test.s -o test.o（将汇编语言变成二进制文件）
+链接生成bin：g++ test.o -o test（链接代码需要用到的其它文件，如库文件等）
+也可以直接一步到位：g++ test.cpp -o test
+
+
+
+gcc/g++编译参数
+编译带调试信息的可执行文件：g++ -g test.cpp
+优化源代码：g++ -O2 test.cpp（-O0标识不做优化，-O1表示默认优化，-O2表示除了完成-O1优化之外，还进行一些额外的调整工作，如指令调整等，-O3则包括循环展开和其它一些与处理特性相关的优化工作，选项将使编译速度变慢，但通常产生的代码执行速度会更快）
+链接库文件：g++ -L/home/bing/mytestlibfolder -lmytest test.cpp（在/lib、/usr/lib、/usr/local/lib里的so直接用-l就能链接，不在这三个目录里的要用-L）
+指定头文件搜索路径：g++ -I/myinclude test.cpp（I是ai，在/usr/include里的头文件不用指定，gcc知道去哪找，不在里头的要用-I，可以用相对路径）
+打印警告信息：g++ -Wall test.cpp
+关闭警告信息：g++ -w test.cpp
+设置编译标准：g++ -std=c++11 test.cpp
+指定输出文件名：g++ test.cpp -o test
+定义宏：gcc -DDEBUG main.cpp
+#include <stdio.h>
+int main()
+{
+	#ifdef DEBUG
+		printf("DEBUG LOG\n");//如果定义了DEBUG这个宏，那这一行会执行
+	#endif
+		printf("in\n");
+}
+
+直接编译（当前目录源文件main.c   ./src目录源文件Swap.cpp   ./include目录头文件）
+最简单的编译：g++ main.cpp src/Swap.cpp -Iinclude -o main
+增加参数编译：g++ mian.cpp src/Swap.cpp -Ilinclude -std=c++11 -O2 -Wall -o main
+生成静态库，然后链接静态库，最后编译：
+cd src
+g++ Swap.cpp -c -o Swap.o -I../include
+ar rs libSwap.a Swap.o
+cd..
+g++ main.cpp -Iinclude -Lsrc -lSwap -o staticmain
+生成动态库，然后链接动态库，最后编译：
+cd src
+g++ Swap.cpp -I../include -fPIC -shared -o libSwap.so
+上面命令等价于->g++ Swap.cpp -I../include -c -fPIC      g++ Swap.o -shared -o libSwap.so
+cd ..
+g++ main.cpp -Iinclude -Lsrc -lSwap -o sharemain（这里是优先找动态库吗？celery讲过）
+
+
+
+gdb常用调试命令参数
+编译带调试信息的可执行文件：g++ -g test.cpp -o test
+进入gdb调试程序：gdb test
+在xxx行设置断点：break xxx（b xxx）
+查看当前设置的所有断点：info breakpoints（i b）
+运行：run（r）
+打印变量i的值：print i（p i）
+追踪查看变量i的值：display i
+继续运行：continue（c）
+执行你上一次执行的命令：回车
+查看断点附近的代码：list（l）
+退出：quit（q）

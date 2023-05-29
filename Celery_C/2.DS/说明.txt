@@ -1,0 +1,41 @@
+底层数据结构均用链表实现
+
+
+linklist：双向循环链表（好像是带头节点的，lib1中结点的数据域用的指针，lib2中结点的数据域用的变长结构体）
+
+
+kernel：仿内核源码写的双向循环链表（为部分实现，功能不全）
+
+
+stack：栈
+
+
+squeue：队列
+
+
+btree：二叉树和平衡二叉树（平衡我觉得有点问题，老师讲的是左右子树结点数差小于等于1就平衡，但实际上是左右子树高度差小于等于1才算平衡）
+
+去别的文件里找到llist.c，llist.h，queue.c，queue.h
+
+把llist.c做成动态库：gcc -shared -fpic -o libllist.so llist.c
+把libllist.so移到/usr/local/lib/下去：sudo mv libllist.so /usr/local/lib/
+把llist.h复制到/usr/loacl/include/下去：sudo cp llist.h /usr/local/include/
+
+把queue.c做成动态库：gcc -shared -fpic -o libqueue.so queue.c
+把libqueue.so移到/usr/local/lib/下去：sudo mv libqueue.so /usr/local/lib/
+把queue.h复制到/usr/loacl/include/下去：sudo cp queue.h /usr/local/include/
+
+
+在/etc/ld.so.conf这个配置文件中添加路径，这个路径是你的动态库的所在位置，在这里是/usr/local/lib/，这样的话除了你去观察标准的动态库所在位置之外，即使你当前发布的这个路径不是标准库的路径，我也会重读
+改完配置文件之后，执行：sudo /sbin/ldconfig，让它重读我们刚才改的那个配置文件
+
+这时可以把btree里的main.c中包含的头文件queue.h由“”改成<>
+
+编译：gcc main.c -o main -lqueue -lllist，也可以：gcc -o main main.c -lqueue -lllist。注意，存在多个依赖的动态库时，被依赖的库永远要在后方出现，lqueue这个库依赖于llist，llist被依赖
+可以用ldd ./main来查看main所牵涉到的动态库
+
+
+tree：广义表
+
+
+trie：搜索树

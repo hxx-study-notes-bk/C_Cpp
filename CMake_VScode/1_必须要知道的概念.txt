@@ -1,0 +1,16 @@
+mingw64：gcc、g++、gdb、*.h、*.c、*.so（MinGW 的全称是：Minimalist GNU on Windows 。它是将经典的开源 C语言 编译器 GCC 移植到了 Windows 平台下，并且包含了 WinAPI ，因此可以将源代码编译为可在 Windows 中运行的可执行程序。一句话说：MinGW 就是 GCC 的 Windows 版本）
+对应于linux下的gcc编译链，或者说/usr/lib下的gcc、g++、gdb...
+
+cmake：cmake工具
+对应与linux下的cmake包
+
+vscode：
+c/c++插件->写代码有智能提示，可调试代码，代码导航
+cmake插件->cmake语言智能提示插件
+cmake tool插件->cmake的扩展支持
+
+都装上之后（linux下的vscode没必要装，即使装了，真实工作环境下，你也只能看到终端，没有可视化界面，用code .命令根本打不开），就可以这么来做了，通过samba可以在linux下新建工程目录及源文件，然后拖到window中来具体写或者改源码，写的时候有智能提示，像一些标准库文件，可以直接跳转到window下装的mingw64中(在编译的时候，实际用的是linux下的标准库文件)，第三方库文件都是放在你在linux下的工程目录中的，只要网络没问题，可以直接跳转到你linux下工程目录保存第三方库文件的地方
+
+cmakelist.txt也是一样的，window下写，因为你在window下也安装了cmake工具包和cmake插件，所以写的时候会有智能提示，具体编译的时候，还是用的你在linux下安装的cmake工具包
+
+编译是在linux的终端上编奥，当然也可以在window下vscode的终端上编，因为你在window下也配了完整的编译环境，但这样看起来怪怪的，不熟悉，windows终端中的斜杠都是反的
