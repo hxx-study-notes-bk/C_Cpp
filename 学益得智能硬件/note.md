@@ -1,11 +1,5 @@
 # GCC编译器
 
-## 一些简单指令
-
-umask 0：将umask值临时地改变成0，重启后会失效
-
-file 文件名：查看文件类型
-
 ## 编译过程
 
 ![image-20230510234317084](note.assets/image-20230510234317084.png)
@@ -64,7 +58,35 @@ scp src des
 
 ![image-20230521223526945](note.assets/image-20230521223526945.png)
 
-# Linux搜索命令
+# Linux常用命令
+
+## umask
+
+将umask值临时地改变成0，重启后会失效
+
+umask 0
+
+## file
+
+查看文件类型
+
+file 文件名
+
+## head
+
+查看文件前10行
+
+head -n 10 test.txt
+
+head --line=10 test.txt
+
+## tail
+
+查看文件后10行
+
+tail -n 10 test.txt
+
+tail --line=10 test.txt
 
 ## find
 
@@ -76,7 +98,7 @@ scp src des
 
 用于查找文件中的关键字
 
-基本格式：grep 关键字 文件名 [选项]，如grep "helloworld" ./*
+基本格式：grep 关键字 文件名 [选项]，如grep "helloworld" ./*，但这样不会递归地去查找，只会在当前目录下的文件内去查找，如果要递归查找，那就grep "helloworld" -rn
 
 # 内存泄漏检测工具valgrind
 
@@ -809,6 +831,36 @@ attribute的作用是用来设置函数、变量、数据类型的属性
 这种写法比较常用，加不加{}都一样，由于abcd是以字符串的形式出现的，所以后面还有个\0，我们把它叫做字符串结束标志，strlen的结果是4，sizeof的结果是5，可以用printf把它当作字符串来输出，也可以用for循环当成字符逐个输出
 
 # C语言打印时间的函数
+
+```c
+#include <stdio.h>
+#include <time.h>
+#include <sys/time.h>
+
+int main()
+{
+    time_t cur = time(NULL);//时间戳
+    printf("%lu\n", cur);
+
+    printf("------localtime------\n");
+    struct tm *t = localtime(&cur);
+    printf("%d 年 %d 月 %d 日 %d 时 %d 分 %d 秒\n",
+            t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
+            t->tm_hour, t->tm_min, t->tm_sec);
+
+    printf("------asctime------\n");
+    printf("%s\n", asctime(t));
+
+    printf("------ctime------\n");
+    printf("%s\n", ctime(&cur));
+
+    printf("------gettimeofday------\n");
+    struct timeval t_val;
+    gettimeofday(&t_val, NULL);
+    printf("%ld %ld\n", t_val.tv_sec, t_val.tv_usec);
+}
+
+```
 
 
 
